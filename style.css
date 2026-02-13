@@ -1,0 +1,28 @@
+.container {
+    justify-content: space-between;
+}               
+.nav  {
+    flex-direction: column;
+}
+.nav li {
+    margin-bottom: 5px;
+}
+.nav li a {
+    color: #949698;
+}
+.text-bg-dark {
+    background-color: #212529;
+}
+.hero-description1 {
+    margin-top:34px;
+    margin-left: 20px;
+}
+.material-icons {
+    vertical-align: top;
+    margin-right: 2px;
+    font-size:24px;
+    color:#ffce3d;
+}
+.hero-description2 span{
+    color: #d6589b;
+}
