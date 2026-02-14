@@ -1,4 +1,4 @@
-# Full-Stack Web App (Frontend Prototype)
+# Full-Stack Web App (Prototype)
 
 **Name:** John Paul T. Habel  
 **Section:** BSIT-3B  
