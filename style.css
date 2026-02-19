@@ -1,3 +1,10 @@
+.page { display: none; }
+.page.active { display: block; }
+body.not-authenticated .role-logged-in { display: none; }
+body.authenticated .role-logged-out { display: none; }
+.role-admin { display: none; }
+body.is-admin .role-admin { display: block; }
+
 .container {
     justify-content: space-between;
 }               
@@ -13,9 +20,8 @@
 .text-bg-dark {
     background-color: #212529;
 }
-.hero-description1 {
-    margin-top:34px;
-    margin-left: 20px;
+section.home {
+    margin: 34px 20px 0px 20px;
 }
 .material-icons {
     vertical-align: top;
@@ -25,4 +31,40 @@
 }
 .hero-description2 span{
     color: #d6589b;
+}
+section.profile span {
+    font-weight: 700;
+}
+
+/*Profile button*/
+
+section.profile button {
+    background-color: white;
+}
+section.profile button:active {
+    text-decoration: underline;
+}
+
+/* verification paragraph background */
+section.verify .verify-container p.bg-success {
+    background-color: #d2e7dd !important;
+    border-radius: 5px;  
+}
+
+/* verification login background */
+section.login .login-container p.bg-success {
+    background-color: #d2e7dd !important;
+    border-radius: 5px;  
+}
+
+/*Label form divider for employee , department , admin*/
+
+section.employee form div.bg-secondary, section.department form div.bg-secondary, section.account form div.bg-secondary {
+    background-color: #f2f2f2 !important;
+}
+
+/* button in request */
+
+section.request button {
+    font-weight: 600;
 }

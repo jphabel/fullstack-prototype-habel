@@ -21,7 +21,4 @@ It simulates a role-based Single Page Application (SPA) where different users (e
 - JavaScript (Vanilla JS)
 - Bootstrap 5 (via CDN)
 
----
-
-## 📂 Project Structure
 
