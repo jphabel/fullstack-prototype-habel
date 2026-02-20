@@ -26,27 +26,19 @@
                         <a href="#/register" class="text-decoration-none role-logged-out">Register</a>
                     </li>
 
-                    <!-- IMPORTANT: admin dropdown is admin-only now -->
-                    <li class="nav-item dropdown role-logged-in role-admin">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Admin
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#/employees">Employees</a></li>
-                            <li><a class="dropdown-item" href="#/accounts">Accounts</a></li>
-                            <li><a class="dropdown-item" href="#/departments">Department</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#/logout">Logout</a></li>
-                        </ul>
-                    </li>
-                    
                     <li class="nav-item dropdown role-logged-in">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            User
+                            Account
                         </a>
+
                         <ul class="dropdown-menu">
+                            
                             <li><a class="dropdown-item" href="#/profile">Profile</a></li>
                             <li><a class="dropdown-item" href="#/requests">My Request</a></li>
+                            <li class="role-admin"><a class="dropdown-item" href="#/employees">Employees</a></li>
+                            <li class="role-admin"><a class="dropdown-item" href="#/departments">Departments</a></li>
+                            <li class="role-admin"><a class="dropdown-item" href="#/accounts">Accounts</a></li>
+
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#/logout">Logout</a></li>
                         </ul>
@@ -57,6 +49,30 @@
         </nav>
 
         <main>
+
+            
+            <!-- dashboard -->
+            <section class="dashboard page p-5" id="dashboard-page">
+            <div class="hero-description ">
+                <div class="hero-description1">
+                    <h2 id="dashWelcome">Welcome</h2>
+                    <p id="dashSub">You are logged in.</p>
+
+                    <ul class="mt-3">
+                        <li>Go to <strong>My Request</strong> to submit/view requests</li>
+                        <li class="role-admin">Admins can manage <strong>Employees</strong>, <strong>Departments</strong>, and <strong>Accounts</strong></li>
+                    </ul>
+                </div>
+
+                <div class="hero-description2 alert alert-info mt-4">
+                    <i class="material-icons">warning</i><strong>Note:</strong> Data is stored in <span>localStorage</span>.
+                </div>
+
+                <a href="#/requests" class="btn btn-primary d-inline-flex align-items-center">
+                    Go to My Requests &#8594;
+                </a>
+            </div>
+            </section>
 
             <!-- home -->
             <section class="home not-authenticated page active" id="home-page">
@@ -90,7 +106,7 @@
                         <h4>Admin User</h4>
                         <p><span>Email : </span> admin@example.com</p>
                         <p><span>Role : </span> Admin</p>
-                        <button class="text-primary border-primary rounded-3 p-1">Edit Profile</button>
+                        <button class="text-primary border-primary rounded-3 p-1 personal-btn">Edit Profile</button>
                     </div>
                 </div>
             </section>
@@ -213,13 +229,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="position" class="form-label">Position</label>
-                                <input type="text" class="form-control" id="position">
+                                <label for="employee-position" class="form-label">Position</label>
+                                <input type="text" class="form-control" id="employee-position" placeholder="e.g. Developer">
                             </div>
 
                             <div class="mb-3">
-                                <label for="employee-department" class="form-label">Department</label>
-                                <input type="text" class="form-control" id="employee-department">
+                                <label for="dept-select" class="form-label">Department</label>
+                                <select class="form-select" id="dept-select"></select>
                             </div>
 
                             <div class="mb-3">
@@ -372,10 +388,44 @@
                 <div class="request-container p-3">
                     <div class="d-flex justify-content-between mb-3">
                         <h2>My Request</h2>
-                        <button id="openRequestModal" type="button" class="btn btn-success">+ New Request</button>
+                        <button id="openRequestModal" type="button" class="btn btn-success" data-open-request>+ New Request</button>
                     </div>
 
-                    <button id="openRequestModal2" type="button" class="btn btn-success">Create One</button>
+                    <button id="openRequestModal2" type="button" class="btn btn-success" data-open-request>Create One</button>
+                    
+                    <div id="reqOverlay" class="d-none" style="position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9998;"></div>
+
+                    <div id="reqModal" class="d-none" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:min(720px,92vw); background:#fff; border-radius:12px; z-index:9999; padding:18px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="m-0">New Request</h5>
+                        <button id="closeReqModal" type="button" class="btn btn-sm btn-outline-secondary">X</button>
+                    </div>
+
+                    <form id="reqForm">
+                        <div class="mb-2">
+                        <label class="form-label">Request Type</label>
+                        <select id="reqType" class="form-select">
+                            <option value="Equipment">Equipment</option>
+                            <option value="Supplies">Supplies</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        </div>
+
+                        <div class="mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="form-label m-0">Items</label>
+                            <button id="addReqItem" type="button" class="btn btn-sm btn-outline-primary">+ Add Item</button>
+                        </div>
+                        <div id="reqItems" class="mt-2"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" id="closeReqModal2">Cancel</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                    </div>
+
 
                     <div id="requestModal" class="modal d-none" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -421,6 +471,55 @@
                         </div>
                     </div>
 
+                </div>
+                <h2 class="mb-3">My Request</h2>
+
+                <div class="table-responsive">
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Items</th>
+                        <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestTableBody"></tbody>
+                    </table>
+                </div>
+
+               
+
+                <!-- request modal -->
+                <div id="reqOverlay" class="req-overlay d-none"></div>
+
+                <div id="reqModal" class="req-modal d-none">
+                <div class="req-card bg-white rounded-3 shadow">
+                    <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                    <h6 class="m-0">New Request</h6>
+                    <button type="button" id="closeReqModal" class="btn btn-sm btn-light">X</button>
+                    </div>
+
+                    <form id="reqForm" class="p-3">
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select id="reqType" class="form-select">
+                        <option value="Equipment">Equipment</option>
+                        <option value="Leave">Leave</option>
+                        <option value="Resources">Resources</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2 d-flex justify-content-between align-items-center">
+                        <label class="form-label m-0">Items</label>
+                        <button type="button" id="addReqItem" class="btn btn-sm btn-outline-secondary">+</button>
+                    </div>
+
+                    <div id="reqItems" class="mb-3"></div>
+
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </form>
+                </div>
                 </div>
             </section>
 
